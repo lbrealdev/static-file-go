@@ -1,0 +1,22 @@
+package main
+
+import (
+	"log"
+	"net/http"
+)
+
+func main() {
+
+	dir := http.Dir("./static")
+
+	fs := http.FileServer(dir)
+
+	mux := http.NewServeMux()
+
+	mux.Handle("/files/", http.StripPrefix("/files/", fs))
+
+	err := http.ListenAndServe(":5555", mux)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
